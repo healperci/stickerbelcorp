@@ -6,7 +6,7 @@ from tkinter import ttk
 import sqlite3
 from tkcalendar import Calendar,DateEntry
 import datetime 
-from datetime import timedelta
+from datetime import date, timedelta
 
 #from sqlite3 import Error
 #import traceback
@@ -22,7 +22,7 @@ miSolicitud=StringVar()
 miAviso=StringVar()
 miFormula=StringVar()
 miDescripcion=StringVar()
-miFechaIngreso=StringVar()
+miFechaIngreso=datetime.datetime().date
 miTipo=StringVar()
 miTiempo=StringVar()
 miTemperatura=StringVar()
@@ -252,22 +252,50 @@ e5.place(x=150, y=70)
 
 l6=Label(root, text="FechaIngreso")
 l6.place(x=20,y=90)
-e6=DateEntry(root, textvariable=miFechaIngreso, width=50)
+e6=DateEntry(root, textvariable=miFechaIngreso)
 e6.place(x=150, y=90)
 
 l7=Label(root, text="Tipo")
 l7.place(x=20,y=110)
-e7=Entry(root, textvariable=miTipo, width=50)
+#e7=Entry(root, textvariable=miTipo, width=50)
+e7=ttk.Combobox(root, textvariable=miTipo,
+                            values=[
+                                    "Natural", 
+                                    "Acelerada",
+                                    "Compatibilidad",
+                                    "Diseño"],
+									state="readonly")
 e7.place(x=150, y=110)
 
 l8=Label(root, text="Tiempo")
 l8.place(x=20,y=130)
-e8=Entry(root, textvariable=miTiempo, width=50)
+#e8=Entry(root, textvariable=miTiempo, width=50)
+e8=ttk.Combobox(root, textvariable=miTiempo,
+                            values=[
+                                    "0", 
+                                    "15",
+                                    "30",
+									"60",
+									"90",
+									"180",
+									"270",
+									"540",
+									"720",
+									"900",
+									"1080"],
+									state="readonly")
 e8.place(x=150, y=130)
 
 l9=Label(root, text="Temperatura")
 l9.place(x=20,y=150)
-e9=Entry(root, textvariable=miTemperatura, width=50)
+#e9=Entry(root, textvariable=miTemperatura, width=50)
+e9=ttk.Combobox(root, textvariable=miTemperatura,
+                            values=[
+                                    "0", 
+                                    "4",
+                                    "40",
+									"50"],
+									state="readonly")
 e9.place(x=150, y=150)
 
 l10=Label(root, text="CantFQ")
@@ -285,11 +313,12 @@ l12.place(x=20,y=210)
 e12=Entry(root, textvariable=miCantContraMuestra, width=50)
 e12.place(x=150, y=210)
 
+#dt1=int(miFechaIngreso)
+#dt = datetime.date(miFechaIngreso) + datetime.timedelta(days=e8) 
 
 l13=Label(root, text="FechaMuestra")
 l13.place(x=20,y=230)
-dt = e6.config 
-e13=DateEntry(root, textvariable=miFechaMuestra )
+e13=DateEntry(root, textvariable=miFechaMuestra)
 e13.place(x=150, y=230)
 
 ################# Creando botones ###########################
@@ -302,9 +331,5 @@ b3=Button(root, text="Mostrar Lista", command=mostrar)
 b3.place(x=650, y=70)
 b4=Button(root, text="Eliminar Registro",bg="red", command=borrar)
 b4.place(x=650, y=100)
-
-
-root.config(menu=menubar)
-
 
 root.mainloop()
