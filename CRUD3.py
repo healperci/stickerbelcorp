@@ -22,14 +22,17 @@ miSolicitud=StringVar()
 miAviso=StringVar()
 miFormula=StringVar()
 miDescripcion=StringVar()
-miFechaIngreso=datetime.datetime().date
+miFechaIngreso=StringVar()
 miTipo=StringVar()
 miTiempo=StringVar()
 miTemperatura=StringVar()
 miCantFQ=StringVar()
+miCantMB=StringVar()
 miCantPreservantes=StringVar()
 miCantContraMuestra=StringVar()
 miFechaMuestra=StringVar()
+
+miTiempo.set('0')
 
 def conexionBBDD():
 	miConexion=sqlite3.connect("base.db")
@@ -60,6 +63,28 @@ def conexionBBDD():
 			TIEMPO INTEGER NOT NULL,
 			TEMPERATURA INTEGER NOT NULL,
 			CANTFQ VARCHAR(50),
+			CANTMB VARCHAR(50),
+			CANTPRESERVANTES VARCHAR(50),
+            CANTCONTRAMUESTRA VARCHAR(50),
+			FECHAMUESTRA VARCHAR(50)
+			)
+
+
+			''')
+		miCursor.execute('''
+			
+			CREATE TABLE IF NOT EXISTS tblStickers (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            SOLICITUD INTEGER NOT NULL,
+            AVISO INTEGER NOT NULL,
+			FORMULA VARCHAR(50) NOT NULL,
+			DESCRIPCION VARCHAR(50),
+			FECHAINGRESO DATE,
+			TIPO VARCHAR(50),
+			TIEMPO INTEGER NOT NULL,
+			TEMPERATURA INTEGER NOT NULL,
+			CANTFQ VARCHAR(50),
+			CANTMB VARCHAR(50),
 			CANTPRESERVANTES VARCHAR(50),
             CANTCONTRAMUESTRA VARCHAR(50),
 			FECHAMUESTRA VARCHAR(50)
@@ -95,9 +120,10 @@ def limpiarCampos():
 	miDescripcion.set("")
 	miFechaIngreso.set("")
 	miTipo.set("")
-	miTiempo.set("")
+	miTiempo.set("0")
 	miTemperatura.set("")
 	miCantFQ.set("")
+	miCantMB.set("")
 	miCantPreservantes.set("")
 	miCantContraMuestra.set("")
 	miFechaMuestra.set("")
@@ -116,9 +142,39 @@ def crear():
 	miConexion=sqlite3.connect("base.db")
 	miCursor=miConexion.cursor()
 	try:
-		datos=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),miCantFQ.get(),miCantPreservantes.get(),miCantContraMuestra.get(),miFechaMuestra.get()
-		miCursor.execute('INSERT INTO tblDatos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? , ? , ?)', (datos))
+		datos=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),miCantFQ.get(),miCantMB.get(),miCantPreservantes.get(),miCantContraMuestra.get(),miFechaMuestra.get()
+		miCursor.execute('INSERT INTO tblDatos VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,?)', (datos))
+
+		CantFQ = 0
+		CantMB = 0
+		CantPreservantes = 0
+		CantContraMuestra = 0
+
+		for registro in range(int(miCantFQ.get())):
+    			CantFQ = CantFQ + 1
+    			sticker=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),CantFQ,miCantPreservantes.get(),miCantContraMuestra.get(),miFechaMuestra.get()
+    			print(sticker)
+    			#miCursor.execute('INSERT INTO tblStickers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? , ? , ?)', (sticker))
+		
+		for registro in range(int(miCantFQ.get())):
+    			CantMB = CantMB + 1
+    			sticker=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),miCantFQ.get(),CantMB,miCantPreservantes.get(),miCantContraMuestra.get(),miFechaMuestra.get()
+    			print(sticker)
+    			#miCursor.execute('INSERT INTO tblStickers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? , ? , ?)', (sticker))
+
+		for registro in range(int(miCantPreservantes.get())):
+    			CantPreservantes = CantPreservantes + 1
+    			sticker=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),miCantFQ.get(),miCantMB.get(),CantPreservantes,miCantContraMuestra.get(),miFechaMuestra.get()
+    			print(sticker)
+    			#miCursor.execute('INSERT INTO tblStickers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? , ? , ?)', (sticker))
+		
+		for registro in range(int(miCantContraMuestra.get())):
+    			CantContraMuestra = CantContraMuestra + 1
+    			sticker=miSolicitud.get(),miAviso.get(),miFormula.get(),miDescripcion.get(),miFechaIngreso.get(),miTipo.get(),miTiempo.get(),miTemperatura.get(),miCantFQ.get(),miCantMB.get(),miCantPreservantes.get(),CantContraMuestra,miFechaMuestra.get()
+    			print(sticker)
+    			#miCursor.execute('INSERT INTO tblStickers VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? , ? , ?)', (sticker))
 		miConexion.commit()
+
 	 
 	except Error:
 		messagebox.showwarning("ADVERTENCIA","Ocurrió un error al crear el registro, verifique conexión con BBDD")
@@ -143,7 +199,7 @@ def mostrar():
 		pass
 
                 ################################## Tabla ################################
-tree=ttk.Treeview(height=10, columns=('#0','#1','#2','#3','#4','#5','#6','#7','#8','#9','#10','#11','#12'))
+tree=ttk.Treeview(height=10, columns=('#0','#1','#2','#3','#4','#5','#6','#7','#8','#9','#10','#11','#12','#13'))
 tree.place(x=20, y=340)
 
 tree.column('#0',width=40)
@@ -167,11 +223,13 @@ tree.heading('#8', text="Temperatura", anchor=CENTER)
 tree.column('#9',width=40)
 tree.heading('#9', text="CantFQ", anchor=CENTER)
 tree.column('#10',width=40)
-tree.heading('#10', text="CantPreservantes", anchor=CENTER)
+tree.heading('#10', text="CantMB", anchor=CENTER)
 tree.column('#11',width=40)
-tree.heading('#11', text="CantContraMuestra", anchor=CENTER)
+tree.heading('#11', text="CantPreservantes", anchor=CENTER)
 tree.column('#12',width=40)
-tree.heading('#12', text="FechaMuestra", anchor=CENTER)
+tree.heading('#12', text="CantContraMuestra", anchor=CENTER)
+tree.column('#13',width=40)
+tree.heading('#13', text="FechaMuestra", anchor=CENTER)
 
 
 def seleccionarUsandoClick(event):
@@ -227,8 +285,8 @@ ayudamenu.add_command(label="Acerca", command=mensaje)
 menubar.add_cascade(label="Ayuda",menu=ayudamenu)
 
 ############## Creando etiquetas y cajas de texto ###########################
-e1=Entry(root, textvariable=miId, width=50)
-e1.place(x=1, y=1)
+#e1=Entry(root, textvariable=miId, width=50)
+#e1.place(x=1, y=1)
 
 l2=Label(root, text="Solicitud")
 l2.place(x=20,y=10)
@@ -303,23 +361,33 @@ l10.place(x=20,y=170)
 e10=Entry(root, textvariable=miCantFQ, width=50)
 e10.place(x=150, y=170)
 
-l11=Label(root, text="Preservantes")
-l11.place(x=20,y=190)
+l10=Label(root, text="CantMB")
+l10.place(x=20,y=190)
+e10=Entry(root, textvariable=miCantMB, width=50)
+e10.place(x=150, y=190)
+
+l11=Label(root, text="CantPreservantes")
+l11.place(x=20,y=210)
 e11=Entry(root, textvariable=miCantPreservantes, width=50)
-e11.place(x=150, y=190)
+e11.place(x=150, y=210)
 
 l12=Label(root, text="CantContraMuetra")
-l12.place(x=20,y=210)
+l12.place(x=20,y=230)
 e12=Entry(root, textvariable=miCantContraMuestra, width=50)
-e12.place(x=150, y=210)
+e12.place(x=150, y=230)
 
-#dt1=int(miFechaIngreso)
-#dt = datetime.date(miFechaIngreso) + datetime.timedelta(days=e8) 
+dta = (str(miFechaIngreso.get()))
+dtt = (int(miTiempo.get()))
+print(dta)
+
+dt = datetime.datetime.strptime(dta, '%d/%m/%y') + datetime.timedelta(days=dtt)
+
+miFechaMuestra = (str(dt))
 
 l13=Label(root, text="FechaMuestra")
-l13.place(x=20,y=230)
-e13=DateEntry(root, textvariable=miFechaMuestra)
-e13.place(x=150, y=230)
+l13.place(x=20,y=250)
+e13=Entry(root, textvariable=miFechaMuestra)
+e13.place(x=150, y=250)
 
 ################# Creando botones ###########################
 
@@ -331,5 +399,9 @@ b3=Button(root, text="Mostrar Lista", command=mostrar)
 b3.place(x=650, y=70)
 b4=Button(root, text="Eliminar Registro",bg="red", command=borrar)
 b4.place(x=650, y=100)
+
+
+root.config(menu=menubar)
+
 
 root.mainloop()
